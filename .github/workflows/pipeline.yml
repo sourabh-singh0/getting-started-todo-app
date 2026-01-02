@@ -1,19 +1,28 @@
 name: Build and Deploy
+
 on:
   push:
     branches: [ main ]
+
 jobs:
   build:
-    runs-on: self-hosted  # <--- This triggers your ARC runner in K3d
+    runs-on: self-hosted  # Runs on your K3d self-hosted runner
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Build Docker Image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/getting-started-todo-app:${{ github.sha }} .
+      - name: Build and Push to Docker Hub
+        uses: aevea/action-kaniko@master
+        with:
+          # Your Docker Hub image name
+          image: ${{ secrets.DOCKER_USERNAME }}/getting-started-todo-app
+          # Tagging with the unique GitHub commit SHA
+          tag: ${{ github.sha }}, latest
+          cache: true
+          registry: index.docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Login to Docker Hub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      - name: Push Image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/getting-started-todo-app:${{ github.sha }}
+
+          # Check
