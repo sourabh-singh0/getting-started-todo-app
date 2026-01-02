@@ -7,7 +7,6 @@ spec:
   replicas: 1
   template:
     spec:
-      repository: sourabh-singh0/getting-started-todo-app  # <--- Use this format
+      repository: sourabh-singh0/getting-started-todo-app
       labels:
         - self-hosted
-      dockerdWithinRunner: true
