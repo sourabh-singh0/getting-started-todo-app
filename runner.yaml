@@ -1,0 +1,13 @@
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: RunnerDeployment
+metadata:
+  name: todo-runner
+  namespace: actions-runner-system
+spec:
+  replicas: 1
+  template:
+    spec:
+      repository: sourabh-singh0/getting-started-todo-app  # <--- Use this format
+      labels:
+        - self-hosted
+      dockerdWithinRunner: true
